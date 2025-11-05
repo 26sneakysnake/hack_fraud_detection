@@ -1,0 +1,95 @@
+# Configuration file for fraud detection project
+
+# Data paths
+data:
+  raw_dir: "data/raw"
+  processed_dir: "data/processed"
+
+  # Input files
+  transactions_train: "data/raw/transactions_train.csv"
+  fraud_labels: "data/raw/train_fraud_labels.json"
+  cards_data: "data/raw/cards_data.csv"
+  users_data: "data/raw/users_data.csv"
+  mcc_codes: "data/raw/mcc_codes.json"
+  evaluation_features: "data/raw/evaluation_features.csv"
+
+  # Output files
+  processed_train: "data/processed/train_processed.csv"
+  processed_eval: "data/processed/eval_processed.csv"
+  submission: "results/submission.csv"
+
+# Model settings
+model:
+  # Random seed for reproducibility
+  random_state: 42
+
+  # Train-validation split (temporal)
+  validation_strategy: "temporal"
+  train_end_date: "2017-12-31"
+
+  # Resampling strategy for imbalanced data
+  resampling_method: "smote"  # Options: smote, undersample, combined, class_weight
+
+  # Models to train
+  models_to_train:
+    - logistic_regression
+    - random_forest
+    - xgboost
+    - lightgbm
+    - gradient_boosting
+
+  # Hyperparameter tuning
+  hyperparameter_tuning: true
+  tuning_method: "random_search"  # Options: grid_search, random_search, bayesian
+  cv_folds: 3
+  n_iter: 50
+
+# Feature engineering
+features:
+  # Temporal features
+  extract_temporal: true
+
+  # User aggregation features
+  user_aggregations:
+    - count
+    - mean
+    - std
+    - median
+    - min
+    - max
+
+  # Card features
+  extract_card_features: true
+
+  # MCC features
+  extract_mcc_features: true
+
+  # Behavioral features
+  extract_behavioral: true
+  window_days: 30
+
+# Evaluation metrics
+metrics:
+  primary_metric: "pr_auc"  # Precision-Recall AUC (best for imbalanced)
+  threshold_optimization: true
+  metrics_to_compute:
+    - accuracy
+    - precision
+    - recall
+    - f1
+    - roc_auc
+    - pr_auc
+
+# Dashboard
+dashboard:
+  port: 8501
+  title: "Fraud Detection Dashboard - Hackathon Finance Track"
+  theme: "light"
+
+# IBM watsonx configuration
+watsonx:
+  use_watsonx: false  # Set to true when credentials are available
+  project_id: ""
+  space_id: ""
+  api_key_env: "WATSONX_API_KEY"
+  url: "https://us-south.ml.cloud.ibm.com"
