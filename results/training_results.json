@@ -1,0 +1,124 @@
+{
+    "best_model": "random_forest",
+    "optimal_threshold": 0.1,
+    "metrics": {
+        "accuracy": 0.9991866554415605,
+        "precision": 0.8641975308641975,
+        "recall": 0.603448275862069,
+        "f1": 0.7106598984771574,
+        "roc_auc": 0.9535818401811745,
+        "pr_auc": 0.7492241757016035,
+        "threshold": 0.1
+    },
+    "features": [
+        "amount",
+        "zip",
+        "mcc",
+        "hour",
+        "day_of_week",
+        "day_of_month",
+        "month",
+        "year",
+        "quarter",
+        "is_weekend",
+        "is_night",
+        "is_business_hours",
+        "hour_sin",
+        "hour_cos",
+        "dow_sin",
+        "dow_cos",
+        "month_sin",
+        "month_cos",
+        "card_transaction_count",
+        "card_age_days",
+        "hours_since_last_card_transaction",
+        "mcc_transaction_count",
+        "mcc_frequency",
+        "mcc_amount_mean",
+        "mcc_amount_std",
+        "amount_deviation_from_mcc_mean",
+        "amount_bin",
+        "amount_log",
+        "amount_sqrt",
+        "is_high_risk_mcc",
+        "is_high_risk_hour",
+        "is_high_amount",
+        "composite_risk_score",
+        "date_encoded",
+        "use_chip_encoded",
+        "merchant_city_encoded",
+        "merchant_state_encoded",
+        "errors_encoded"
+    ],
+    "config": {
+        "data": {
+            "raw_dir": "data/raw",
+            "processed_dir": "data/processed",
+            "transactions_train": "data/raw/transactions_train.csv",
+            "fraud_labels": "data/raw/train_fraud_labels.json",
+            "cards_data": "data/raw/cards_data.csv",
+            "users_data": "data/raw/users_data.csv",
+            "mcc_codes": "data/raw/mcc_codes.json",
+            "evaluation_features": "data/raw/evaluation_features.csv",
+            "processed_train": "data/processed/train_processed.csv",
+            "processed_eval": "data/processed/eval_processed.csv",
+            "submission": "results/submission.csv"
+        },
+        "model": {
+            "random_state": 42,
+            "validation_strategy": "temporal",
+            "train_end_date": "2017-12-31",
+            "resampling_method": "smote",
+            "models_to_train": [
+                "logistic_regression",
+                "random_forest",
+                "xgboost",
+                "lightgbm",
+                "gradient_boosting"
+            ],
+            "hyperparameter_tuning": true,
+            "tuning_method": "random_search",
+            "cv_folds": 3,
+            "n_iter": 50
+        },
+        "features": {
+            "extract_temporal": true,
+            "user_aggregations": [
+                "count",
+                "mean",
+                "std",
+                "median",
+                "min",
+                "max"
+            ],
+            "extract_card_features": true,
+            "extract_mcc_features": true,
+            "extract_behavioral": true,
+            "window_days": 30
+        },
+        "metrics": {
+            "primary_metric": "pr_auc",
+            "threshold_optimization": true,
+            "metrics_to_compute": [
+                "accuracy",
+                "precision",
+                "recall",
+                "f1",
+                "roc_auc",
+                "pr_auc"
+            ]
+        },
+        "dashboard": {
+            "port": 8501,
+            "title": "Fraud Detection Dashboard - Hackathon Finance Track",
+            "theme": "light"
+        },
+        "watsonx": {
+            "use_watsonx": false,
+            "project_id": "",
+            "space_id": "",
+            "api_key_env": "WATSONX_API_KEY",
+            "url": "https://us-south.ml.cloud.ibm.com"
+        }
+    }
+}

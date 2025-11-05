@@ -25,9 +25,16 @@ def load_transactions(filepath: str) -> pd.DataFrame:
     logger.info(f"Loading transactions from {filepath}")
     df = pd.read_csv(filepath)
 
-    # Convert timestamp to datetime
+    # Convert timestamp/date to datetime
     if 'timestamp' in df.columns:
         df['timestamp'] = pd.to_datetime(df['timestamp'])
+    elif 'date' in df.columns:
+        df['timestamp'] = pd.to_datetime(df['date'])
+
+    # Clean and convert amount column
+    if 'amount' in df.columns:
+        # Remove $ sign and convert to float
+        df['amount'] = df['amount'].astype(str).str.replace('$', '', regex=False).astype(float)
 
     logger.info(f"Loaded {len(df)} transactions with {df.shape[1]} features")
     return df
@@ -45,17 +52,19 @@ def load_fraud_labels(filepath: str) -> pd.DataFrame:
     """
     logger.info(f"Loading fraud labels from {filepath}")
     with open(filepath, 'r') as f:
-        labels_dict = json.load(f)
+        data = json.load(f)
+
+    # Extract the target dictionary (handle nested structure)
+    if 'target' in data:
+        labels_dict = data['target']
+    else:
+        labels_dict = data
 
     # Convert to DataFrame
     df = pd.DataFrame([
-        {'transaction_id': tid, 'is_fraud': label}
+        {'transaction_id': int(tid), 'is_fraud': 1 if label == 'Yes' else 0}
         for tid, label in labels_dict.items()
     ])
-
-    # Convert transaction_id to appropriate type
-    df['transaction_id'] = df['transaction_id'].astype(int)
-    df['is_fraud'] = df['is_fraud'].astype(int)
 
     fraud_rate = df['is_fraud'].mean()
     logger.info(f"Loaded {len(df)} labels. Fraud rate: {fraud_rate:.4f} ({fraud_rate*100:.2f}%)")
@@ -123,7 +132,7 @@ def load_mcc_codes(filepath: str) -> pd.DataFrame:
 
     # Convert to DataFrame
     df = pd.DataFrame([
-        {'mcc_code': code, 'mcc_description': desc}
+        {'mcc_code': int(code), 'mcc_description': desc}
         for code, desc in mcc_dict.items()
     ])
 
