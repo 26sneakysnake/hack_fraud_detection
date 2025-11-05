@@ -1,0 +1,51 @@
+╔══════════════════════════════════════════════════════════════════╗
+║              🔧 SOLUTION RAPIDE - Erreur d'installation          ║
+╚══════════════════════════════════════════════════════════════════╝
+
+VOTRE PROBLÈME : Python 3.13 + anciennes versions de packages
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ SOLUTION (Copiez-collez ces commandes dans PowerShell)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# 1. Désactiver le venv actuel (si activé)
+deactivate
+
+# 2. Supprimer l'ancien venv
+Remove-Item -Recurse -Force venv
+
+# 3. Créer un nouveau venv
+python -m venv venv
+
+# 4. Activer le venv
+.\venv\Scripts\activate
+
+# 5. Mettre à jour pip
+python -m pip install --upgrade pip
+
+# 6. Installer avec le nouveau fichier requirements
+pip install -r requirements-windows.txt
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ TESTER L'INSTALLATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# Vérifier que tout est installé
+python -c "import numpy, pandas, sklearn, xgboost, lightgbm; print('✅ OK!')"
+
+# Tester le système
+python scripts/predict.py
+
+# Lancer le dashboard
+streamlit run dashboard/app.py
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+⚠️  SI ÇA NE MARCHE PAS : Installer manuellement
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+pip install numpy pandas scikit-learn xgboost lightgbm matplotlib seaborn plotly imbalanced-learn tqdm streamlit joblib pyyaml
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
