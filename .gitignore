@@ -62,3 +62,4 @@ Thumbs.db
 # Cache
 .cache/
 *.cache
+data/processed/*.csv

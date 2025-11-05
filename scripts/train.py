@@ -107,6 +107,16 @@ def main(config_path='config/config.yaml'):
     X_val = val_df[feature_cols].select_dtypes(include=[np.number])
     y_val = val_df['is_fraud']
 
+    # Fill remaining NaN values (SMOTE doesn't accept NaN)
+    logger.info("\nFilling remaining NaN values...")
+    nan_count_train = X_train.isna().sum().sum()
+    nan_count_val = X_val.isna().sum().sum()
+    if nan_count_train > 0 or nan_count_val > 0:
+        logger.info(f"Found {nan_count_train} NaN in train, {nan_count_val} NaN in validation")
+        X_train = X_train.fillna(0)
+        X_val = X_val.fillna(0)
+        logger.info("NaN values filled with 0")
+
     logger.info(f"\nTrain set: {X_train.shape}")
     logger.info(f"Validation set: {X_val.shape}")
     logger.info(f"Number of features: {len(X_train.columns)}")
